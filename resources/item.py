@@ -1,0 +1,1 @@
+# Method for handling API requests related to an item
