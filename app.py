@@ -13,7 +13,6 @@ load_dotenv()
 
 app = Flask(__name__)
 
-app.config['MONGODB_DB'] = 'grocery'
 app.config['MONGODB_HOST'] = os.getenv('MONGODB_URI')
 
 

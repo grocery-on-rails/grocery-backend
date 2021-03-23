@@ -9,7 +9,7 @@
 // clicking on subcategory => redirects you to searching with no restriction filtered with the subcategory
 // the only place where we would need category:
 //      category page to display the subcategories
-
+ 
 productSummary
     {
         "id": ..., 
