@@ -1,11 +1,39 @@
 // NOTE: we agreed to use snake case :p
 
-// TODO: write the specifications here
-// need to include id, image, name, price
-productSummary
 
-// TODO: write the specifications here
+// ** categories vs subcategories issue **
+// let's deal with "category" as an abstract concept
+// a category is a collection of subcategories
+// every product should have a property subcategory: List<subcategory>
+//               but not a category property
+// clicking on subcategory => redirects you to searching with no restriction filtered with the subcategory
+// the only place where we would need category:
+//      category page to display the subcategories
+
+productSummary
+    {
+        "id": ..., 
+        "name": ...,
+        "price": number,
+        "image": ImageURL
+    },
+
 product
+    {
+        "id": ..., 
+        "name": ...,
+        "price": number, //! backend side edit required here
+        "image_list": List<ImageURL>,
+        "subcategory": List<category>,
+
+        //! backend side edit required here
+        // rest of properties should be inside the following object
+        // to put them all in a table
+        others: {
+            "unit": ...,
+            "..." : ...
+        }
+    },
 
 $URL/home:
     {
