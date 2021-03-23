@@ -1,0 +1,41 @@
+// NOTE: we agreed to use snake case :p
+
+// TODO: write the specifications here
+// need to include id, image, name, price
+productSummary
+
+// TODO: write the specifications here
+product
+
+$URL/home:
+    {
+        slides: List<ImageURL>,
+        content: [
+            {
+                title: sectionTitle,
+                content: List<productSummary>
+            },
+            ...
+        ]
+    }
+
+$URL/cat:
+    [
+        {
+            title: sectionTitle,
+            content: [
+                {
+                    title: sectionTitle,
+                    image: subsectionImageURL
+                }
+            ]
+        }
+    ]
+
+$URL/product/ID:
+    product
+
+[!1]. not the full functionalities for now only search by keyword (not filter, or sort)
+[!2]. no need to implement the show subcategory, as it can be displayed using the search
+$URL/search/keyword:
+    List<productSummary>
