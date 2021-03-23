@@ -22,7 +22,9 @@ product
     {
         "id": ..., 
         "name": ...,
-        "price": number, //! backend side edit required here
+        "price": {
+            "$numberDouble": number
+        },
         "image_list": List<ImageURL>,
         "subcategory": List<category>,
         "description": a paragraph,
