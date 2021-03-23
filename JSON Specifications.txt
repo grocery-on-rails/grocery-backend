@@ -25,6 +25,7 @@ product
         "price": number, //! backend side edit required here
         "image_list": List<ImageURL>,
         "subcategory": List<category>,
+        "description": a paragraph,
 
         //! backend side edit required here
         // rest of properties should be inside the following object
