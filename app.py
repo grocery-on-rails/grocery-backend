@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_debugtoolbar import DebugToolbarExtension
 from flask import jsonify, make_response
 from flask_bcrypt import Bcrypt
 from flask_restful import Api
@@ -12,10 +13,9 @@ load_dotenv()
 
 app = Flask(__name__)
 
-app.config['MONGODB_SETTINGS'] = {
-    'MONGODB_DB': 'grocery',
-    'MONGODB_HOST': os.getenv('MONGODB_URI')
-}
+app.config['MONGODB_DB'] = 'grocery'
+app.config['MONGODB_HOST'] = os.getenv('MONGODB_URI')
+
 
 # @app.errorhandler(404)
 # def not_found(error):
@@ -30,5 +30,4 @@ api = Api(app)
 initialize_db(app)
 initialize_routes(api)
 
-if(__name__ == "__main__"):
-    app.run(debug=True)
+app.run(debug=True)
