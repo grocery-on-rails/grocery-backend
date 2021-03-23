@@ -38,7 +38,7 @@ product
         }
     },
 
-$URL/home:
+GET $URL/home:
     {
         slides: List<ImageURL>,
         content: [
@@ -50,7 +50,7 @@ $URL/home:
         ]
     }
 
-$URL/cat:
+GET $URL/cat:
     [
         {
             title: sectionTitle,
@@ -63,7 +63,7 @@ $URL/cat:
         }
     ]
 
-$URL/product/ID:
+GET $URL/product/ID:
     product
 
 [!1]. not the full functionalities for now only search by keyword (not filter, or sort)
