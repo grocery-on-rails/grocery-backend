@@ -1,3 +1,5 @@
 .vscode
 grocery
 *.json
+.env
+__pycache__
