@@ -18,6 +18,10 @@ class Meat(db.DynamicDocument):
         'collection': 'meat'
     }
 
+    # @queryset_manager
+    # def product_lists(doc_cls, queryset):
+    #     return queryset.fields(id=1, name=1, price=1, slice__image_list=1)
+
 class Vegetable(db.DynamicDocument):
     name = db.StringField()
     price = db.FloatField()
