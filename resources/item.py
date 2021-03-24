@@ -6,11 +6,11 @@ import json
 # Method for handling API requests related to an item
 class ItemsApi(Resource):
     def get(self):
-        recently_viewed = json.loads(Meat.objects().fields[0:5](id=1, name=1, price=1, slice__image_list=1).to_json())
-        new_arrivals = json.loads(Meat.objects().fields[5:10](id=1, name=1, price=1, slice__image_list=1).to_json())
-        today_deals = json.loads(Meat.objects().fields[10:20](id=1, name=1, price=1, slice__image_list=1).to_json())
-        top_sells = json.loads(Meat.objects().fields[20:25](id=1, name=1, price=1, slice__image_list=1).to_json())
-        fresh_vegies = json.loads(Vegetable.objects().fields[0:16](id=1, name=1, price=1, slice__image_list=1).to_json())
+        recently_viewed = json.loads(Meat.objects()[0:5].fields(id=1, name=1, price=1, slice__image_list=1).to_json())
+        new_arrivals = json.loads(Meat.objects()[5:10].fields(id=1, name=1, price=1, slice__image_list=1).to_json())
+        today_deals = json.loads(Meat.objects()[10:20].fields(id=1, name=1, price=1, slice__image_list=1).to_json())
+        top_sells = json.loads(Meat.objects()[20:25].fields(id=1, name=1, price=1, slice__image_list=1).to_json())
+        fresh_vegies = json.loads(Vegetable.objects()[0:16].fields(id=1, name=1, price=1, slice__image_list=1).to_json())
         # vegie = json.loads(Vegetable.objects().fields(id=1, name=1, price=1, slice__image_list=1).to_json())
         # #print(Meat.objects().)
         data = {}
