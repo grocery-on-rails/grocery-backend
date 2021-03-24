@@ -6,12 +6,18 @@ import json
 # Method for handling API requests related to an item
 class ItemsApi(Resource):
     def get(self):
-        meat = json.loads(Meat.objects().fields(id=1, name=1, price=1, slice__image_list=1).to_json())
-        vegie = json.loads(Vegetable.objects().fields(id=1, name=1, price=1, slice__image_list=1).to_json())
-        #print(Meat.objects().)
+        recently_viewed = json.loads(Meat.objects().fields[0:5](id=1, name=1, price=1, slice__image_list=1).to_json())
+        new_arrivals = json.loads(Meat.objects().fields[5:10](id=1, name=1, price=1, slice__image_list=1).to_json())
+        today_deals = json.loads(Meat.objects().fields[10:20](id=1, name=1, price=1, slice__image_list=1).to_json())
+        top_sells = json.loads(Meat.objects().fields[20:25](id=1, name=1, price=1, slice__image_list=1).to_json())
+        fresh_vegies = json.loads(Vegetable.objects().fields[0:16](id=1, name=1, price=1, slice__image_list=1).to_json())
+        # vegie = json.loads(Vegetable.objects().fields(id=1, name=1, price=1, slice__image_list=1).to_json())
+        # #print(Meat.objects().)
         data = {}
         data['slides'] = list(["https://via.placeholder.com/150", "https://via.placeholder.com/100", "https://via.placeholder.com/200"])
-        data['content'] = list([{'title': 'meat', 'content': meat}, {'title': 'vegetables', 'content': vegie}])
+        data['content'] = list([{'title': 'recently_viewed', 'content': recently_viewed}, \
+        {'title': 'new_arrivals', 'content': new_arrivals}, {'title': 'today_deals', 'content': today_deals}, \
+        {'title': 'top_sells', 'content': top_sells}, {'title': 'fresh_vegies', 'content': fresh_vegies}])
         return Response(json.dumps(data), mimetype="application/json", status=200)
     
     def post(self):

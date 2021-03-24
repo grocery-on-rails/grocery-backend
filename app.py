@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_debugtoolbar import DebugToolbarExtension
 from flask import jsonify, make_response
 from flask_bcrypt import Bcrypt
 from flask_restful import Api
