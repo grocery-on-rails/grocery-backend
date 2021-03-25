@@ -40,7 +40,7 @@ class ItemApi(Resource):
 
 class ItemSearchApi(Resource):
     def get(self, raw_keyword):
-        keyword = unquote(raw_keyword).capitalize()
+        keyword = unquote(raw_keyword).title()
         matching_products = extract_basic_info(json.loads(Product.objects(name__contains=keyword).to_json()))
         return Response(json.dumps(matching_products), mimetype="application/json", status=200)
 
