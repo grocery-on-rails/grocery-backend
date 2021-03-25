@@ -3,7 +3,7 @@ def extract_basic_info(products):
     for product in products:
         product_basic = {}
         try:
-            product_basic['id'] = product['_id']
+            product_basic['_id'] = product['_id']
             product_basic['name'] = product['name']
             product_basic['price'] = product['price']
             product_basic['image'] = product['image_list'][0]
