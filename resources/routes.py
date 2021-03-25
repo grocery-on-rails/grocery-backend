@@ -1,6 +1,8 @@
 from .item import ItemsApi, ItemApi, ItemSearchApi
+from .category import CategoryApi
 
 def initialize_routes(api):
     api.add_resource(ItemsApi, '/home')
     api.add_resource(ItemApi, '/product/<id>')
     api.add_resource(ItemSearchApi, '/search/<raw_keyword>')
+    api.add_resource(CategoryApi, '/cat')

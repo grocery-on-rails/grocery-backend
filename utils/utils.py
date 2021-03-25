@@ -12,3 +12,14 @@ def extract_basic_info(products):
             exit(1)
         basic_products.append(product_basic)
     return basic_products
+
+def wrap_category_info(categories):
+    category_info = []
+    for category in categories:
+        categrory_dict = {}
+        categrory_dict['title'] = category['category']
+        categrory_dict['content'] = []
+        for subcat in category['subcategory']:
+            categrory_dict['content'].append({'title': subcat, 'image': 'https://via.placeholder.com/100'})
+        category_info.append(categrory_dict)
+    return category_info
