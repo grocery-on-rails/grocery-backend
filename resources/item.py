@@ -2,6 +2,7 @@ from flask import Response, request,jsonify
 from database.models import Product, Category
 from flask_restful import Resource
 from utils.utils import *
+from urllib.parse import unquote
 import json
 
 # Method for handling API requests related to an item
@@ -38,7 +39,8 @@ class ItemApi(Resource):
         return Response(json.dumps(item), mimetype="application/json", status=200)
 
 class ItemSearchApi(Resource):
-    def get(self, keyword):
-        matching_products = extract_basic_info(json.loads(Product.objects(name__contains=keyword.capitalize()).to_json()))
+    def get(self, raw_keyword):
+        keyword = unquote(raw_keyword).capitalize()
+        matching_products = extract_basic_info(json.loads(Product.objects(name__contains=keyword).to_json()))
         return Response(json.dumps(matching_products), mimetype="application/json", status=200)
 
