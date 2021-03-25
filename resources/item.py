@@ -47,8 +47,8 @@ class ItemSearchApi(Resource):
                     #{"$project": {"_id":0,"name": 1,"price": 1,"score": { "$meta": "searchScore" }}}
                   ]
         matching_products = extract_basic_info((list(Product.objects().aggregate(pipeline))))
-        for product in matching_products:
-            product["_id"]= {"$oid":str(product["_id"])}
+        # for product in matching_products:
+        #     product["_id"]= {"$oid": str(product["_id"])}
         
         #matching_products = extract_basic_info(json.loads(Product.objects(name__contains=keyword).to_json()))
         

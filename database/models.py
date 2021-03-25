@@ -7,7 +7,6 @@ class Product(db.DynamicDocument):
     image_list = db.ListField(db.URLField())
     subcategory = db.ListField(db.StringField())
     description = db.StringField(required=True)
-    info_list = db.ListField(db.StringField())
     others = db.DynamicField()
 
     meta = {
