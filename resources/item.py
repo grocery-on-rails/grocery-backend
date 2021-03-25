@@ -40,7 +40,17 @@ class ItemApi(Resource):
 
 class ItemSearchApi(Resource):
     def get(self, raw_keyword):
-        keyword = unquote(raw_keyword).title()
-        matching_products = extract_basic_info(json.loads(Product.objects(name__contains=keyword).to_json()))
+        keyword = unquote(raw_keyword)
+        pipeline= [
+                    {"$search": {"text": {"query": keyword, "path": ["name","subcategory","description","others.quantity"]}}},
+                    {"$sort":{"score": -1}},
+                    #{"$project": {"_id":0,"name": 1,"price": 1,"score": { "$meta": "searchScore" }}}
+                  ]
+        matching_products = extract_basic_info((list(Product.objects().aggregate(pipeline))))
+        for product in matching_products:
+            product["_id"]= {"$oid":str(product["_id"])}
+        
+        #matching_products = extract_basic_info(json.loads(Product.objects(name__contains=keyword).to_json()))
+        
         return Response(json.dumps(matching_products), mimetype="application/json", status=200)
 
