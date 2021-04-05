@@ -3,6 +3,7 @@ from database.models import Product
 from flask_restful import Resource
 from utils.utils import *
 from urllib.parse import unquote
+from bson import json_util
 import json
 
 # Method for handling API requests related to an item
@@ -33,10 +34,8 @@ class ItemsApi(Resource):
 
 class ItemApi(Resource):
     def get(self, id):
-        item = json.loads(Product.objects().get(id=id).to_json())
-        print(type(item))
-        print(item)
-        return Response(json.dumps(item), mimetype="application/json", status=200)
+        item = Product.objects().get(id=id).to_json()
+        return Response(item, mimetype="application/json", status=200)
 
 class ItemSearchApi(Resource):
     def get(self, raw_keyword):
@@ -51,6 +50,6 @@ class ItemSearchApi(Resource):
         #     product["_id"]= {"$oid": str(product["_id"])}
         
         #matching_products = extract_basic_info(json.loads(Product.objects(name__contains=keyword).to_json()))
-        
-        return Response(json.dumps(matching_products), mimetype="application/json", status=200)
+        print(matching_products)
+        return Response(json_util.dumps(matching_products), mimetype="application/json", status=200)
 
