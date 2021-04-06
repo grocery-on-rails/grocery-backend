@@ -6,7 +6,10 @@ def extract_basic_info(products):
             product_basic['_id'] = product['_id']
             product_basic['name'] = product['name']
             product_basic['price'] = product['price']
-            product_basic['image'] = product['image_list'][0]
+            if(len(product['image_list']) > 0):
+                product_basic['image'] = product['image_list'][0]
+            else:
+                product_basic['image'] = None
         except KeyError:
             print("Failed to locate the correct key in the dicionary.")
             exit(1)
