@@ -1,4 +1,5 @@
 from .db_init import db
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 # Here stores all the classes of objects
 class Product(db.DynamicDocument):
@@ -13,14 +14,24 @@ class Product(db.DynamicDocument):
         'collection': 'products'
     }
 
-    # @queryset_manager
-    # def product_lists(doc_cls, queryset):
-    #     return queryset.fields(id=1, name=1, price=1, slice__image_list=1)
-
-class Category(db.DynamicDocument):
+class Category(db.Document):
     category = db.StringField()
     subcategory = db.ListField(db.StringField)
     meta = {
         'collection': 'meta'
     }
+
+class User(db.DynamicDocument):
+    username = db.StringField()
+    password = db.StringField(required=True)
+    email = db.EmailField(required=True)
+    privilege = db.BooleanField(default=False)
+    meta = {
+        'collection': 'users'
+    }
+
+    def hash_password(self):
+        self.password = generate_password_hash(self.password).decode('utf8')
     
+    def check_password(self, password):
+        return check_password_hash(self.password, password)

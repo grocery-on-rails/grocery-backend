@@ -1,4 +1,5 @@
 .vscode
+.vs
 grocery
 *.json
 __pycache__
