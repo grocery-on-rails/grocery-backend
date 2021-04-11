@@ -1,5 +1,9 @@
 def extract_basic_info(products):
     basic_products = []
+    is_iterable = True
+    if not isinstance(products, list):
+        products = [products]
+        is_iterable = False
     for product in products:
         product_basic = {}
         try:
@@ -14,7 +18,7 @@ def extract_basic_info(products):
             print("Failed to locate the correct key in the dicionary.")
             exit(1)
         basic_products.append(product_basic)
-    return basic_products
+    return basic_products if is_iterable else basic_products[0]
 
 def wrap_category_info(categories):
     category_info = []

@@ -1,3 +1,4 @@
+from mongoengine.queryset.manager import queryset_manager
 from .db_init import db
 from flask_bcrypt import generate_password_hash, check_password_hash
 
@@ -26,10 +27,14 @@ class User(db.DynamicDocument):
     password = db.StringField(required=True)
     email = db.EmailField(required=True)
     privilege = db.BooleanField(default=False)
+    cart = db.ListField(db.DictField())
     meta = {
         'collection': 'users'
     }
-
+    
+    # @queryset_manager
+    # def UserCartItemSearch(docs_cls, queryset):
+    #     return queryset
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf8')
     
