@@ -1,7 +1,7 @@
 from flask import Response, request
 from flask_jwt_extended.utils import get_jwt_identity
 from flask_jwt_extended.view_decorators import jwt_required
-from mongoengine.errors import DoesNotExist
+from mongoengine.errors import DoesNotExist, ValidationError
 from database.models import Product, User
 from flask_restful import Resource
 from utils.utils import *
@@ -32,10 +32,14 @@ class ItemsApi(Resource):
         user = User.objects.get(id=user_id)
         if not user.privilege:
             return {'error': 'Elevated privilege required'}, 403
-        new_product = Product(**body)
-        new_product.save()
-        id = new_product.id
-        return {'id': str(id)}, 200
+        try:
+            new_product = Product(**body)
+        except ValidationError:
+            return {'error': 'Missing required values'}, 400
+        else:
+            new_product.save()
+            id = new_product.id
+            return {'id': str(id)}, 200
     
     @jwt_required()
     def delete(self):
@@ -53,8 +57,12 @@ class ItemsApi(Resource):
 
 class ItemApi(Resource):
     def get(self, id):
-        item = Product.objects().get(id=id).to_json()
-        return Response(item, mimetype="application/json", status=200)
+        try:
+            item = Product.objects().get(id=id).to_json()
+        except DoesNotExist:
+            return {'error': 'Product ID not found'}, 404
+        else:
+            return Response(item, mimetype="application/json", status=200)
 
 class ItemSearchApi(Resource):
     def get(self, raw_keyword):

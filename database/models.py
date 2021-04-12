@@ -32,9 +32,6 @@ class User(db.DynamicDocument):
         'collection': 'users'
     }
     
-    # @queryset_manager
-    # def UserCartItemSearch(docs_cls, queryset):
-    #     return queryset
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf8')
     

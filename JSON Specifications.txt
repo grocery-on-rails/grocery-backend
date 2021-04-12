@@ -92,7 +92,18 @@ DELETE $URL/home: Delete a product
         "id": ...
     }
 
+APIs for user, attach user login JWT token when sending requests
 
+POST $URL/cart: Add new product to cart / Modify quantity of an existing product / Delete a product in cart, quantity should not be delta(increment/decrement), it should be the final quantity. Set quantity to 0 to delete it.
+    {
+        'product_id': ...,
+        'quantity': 10
+    }
+
+GET $URL/cart: Get product summary and quantity
+    {
+        
+    }
 
 [!1]. not the full functionalities for now only search by keyword (not filter, or sort)
 [!2]. no need to implement the show subcategory, as it can be displayed using the search
