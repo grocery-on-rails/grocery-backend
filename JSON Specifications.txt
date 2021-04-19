@@ -36,6 +36,9 @@ product
             "unit": ...,
             "..." : ...
         }
+        "stock": {
+        "$numberDouble": "0.0"
+        }
     },
 
 GET $URL/home:
