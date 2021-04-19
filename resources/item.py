@@ -9,6 +9,7 @@ from urllib.parse import unquote
 from bson import json_util
 import json
 
+
 # Method for handling API requests related to an item
 class ItemsApi(Resource):
     def get(self):
@@ -58,15 +59,36 @@ class ItemApi(Resource):
 
 class ItemSearchApi(Resource):
     def get(self, raw_keyword):
+
         keyword = unquote(raw_keyword)
-        pipeline= [
+        pipeline= [  
                     {"$search": {"text": {"query": keyword, "path": ["name","subcategory","description","others.quantity"]}}},
                     {"$sort":{"score": -1}},
                     #{"$project": {"_id":0,"name": 1,"price": 1,"score": { "$meta": "searchScore" }}}
                   ]
         matching_products = extract_basic_info((list(Product.objects().aggregate(pipeline))))
-        # for product in matching_products:
-        #     product["_id"]= {"$oid": str(product["_id"])}
+        ids=[str(i["_id"]) for i in matching_products]
+        print(ids)
+        if len(matching_products)<10:
+                p= extract_basic_info( json.loads(Product.objects( name__istartswith=keyword).to_json()))
+                for i in p:             
+                    if i["_id"]["$oid"] not in ids:
+                            matching_products.append(i)
+                            ids.append(i["_id"])
+        if len(matching_products)<20:
+                p= extract_basic_info( json.loads(Product.objects( name__icontains=keyword).to_json()))
+                for i in p:             
+                    if i["_id"]["$oid"] not in ids:
+                            matching_products.append(i)
+                            ids.append(i["_id"])
+        if len(matching_products)<30:
+                p= extract_basic_info( json.loads(Product.objects( description__icontains=keyword).to_json()))
+                for i in p:             
+                    if i["_id"]["$oid"] not in ids:
+                            matching_products.append(i)
+                            ids.append(i["_id"])
+        #matching_products= sorted(matching_products, key=lambda k: k['name'],reverse=True) 
+        
         
         #matching_products = extract_basic_info(json.loads(Product.objects(name__contains=keyword).to_json()))
         return Response(json_util.dumps(matching_products), mimetype="application/json", status=200)
