@@ -66,24 +66,27 @@ class ItemSearchApi(Resource):
                     {"$sort":{"score": -1}},
                     #{"$project": {"_id":0,"name": 1,"price": 1,"score": { "$meta": "searchScore" }}}
                   ]
-        matching_products = extract_basic_info((list(Product.objects().aggregate(pipeline))))
+        matching_products = extract_basic_info((list(Product.objects().aggregate(pipeline))))[:100]
         ids=[str(i["_id"]) for i in matching_products]
-        print(ids)
+       
         if len(matching_products)<10:
                 p= extract_basic_info( json.loads(Product.objects( name__istartswith=keyword).to_json()))
-                for i in p:             
+                
+                for i in p[:75]:             
                     if i["_id"]["$oid"] not in ids:
                             matching_products.append(i)
                             ids.append(i["_id"])
         if len(matching_products)<20:
                 p= extract_basic_info( json.loads(Product.objects( name__icontains=keyword).to_json()))
-                for i in p:             
+               
+                for i in p[:50]:             
                     if i["_id"]["$oid"] not in ids:
                             matching_products.append(i)
                             ids.append(i["_id"])
         if len(matching_products)<30:
                 p= extract_basic_info( json.loads(Product.objects( description__icontains=keyword).to_json()))
-                for i in p:             
+                
+                for i in p[:25]:             
                     if i["_id"]["$oid"] not in ids:
                             matching_products.append(i)
                             ids.append(i["_id"])
