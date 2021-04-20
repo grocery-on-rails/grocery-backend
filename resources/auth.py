@@ -6,6 +6,7 @@ from flask_jwt_extended import create_access_token
 from mongoengine.errors import DoesNotExist
 from database.models import User
 import datetime
+
 class SignupApi(Resource):
     def post(self):
         body = request.get_json()
@@ -32,6 +33,8 @@ class LoginApi(Resource):
         
         expires = datetime.timedelta(days=1)
         access_token = create_access_token(identity=str(user.id), expires_delta=expires)
-        return {'token': access_token}, 200
+        now = datetime.datetime.utcnow()
+        expires_epoch = ((now + expires) - datetime.datetime(1970, 1, 1)).total_seconds()
+        return {'token': access_token, 'token_expiry': expires_epoch}, 200
 
         
