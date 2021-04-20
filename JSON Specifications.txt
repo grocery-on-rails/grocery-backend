@@ -37,8 +37,11 @@ product
             "..." : ...
         }
         "stock": {
-        "$numberDouble": "0.0"
-        }
+             "$numberDouble": "0.0"
+        },
+        "discount": {
+             "$numberDouble": "0.0"
+         }
     },
 
 GET $URL/home:
