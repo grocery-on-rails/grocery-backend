@@ -1,6 +1,7 @@
 from flask import Response, request
 from flask_jwt_extended.utils import get_jwt_identity
 from flask_jwt_extended.view_decorators import jwt_required
+import jwt
 from mongoengine.errors import DoesNotExist, ValidationError
 from database.models import Product, User
 from flask_restful import Resource
@@ -103,4 +104,10 @@ class ItemSearchApi(Resource):
         
         #matching_products = extract_basic_info(json.loads(Product.objects(name__contains=keyword).to_json()))
         return Response(json_util.dumps(matching_products), mimetype="application/json", status=200)
+
+class EmptyStockApi(Resource):
+    @jwt_required()
+    def get(self):
+        out_stock = extract_basic_info(json.loads(Product.objects(stock=0).to_json()))
+        return Response(json.dumps(out_stock), mimetype="application/json", status=200)
 

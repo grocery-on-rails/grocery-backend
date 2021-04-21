@@ -108,7 +108,7 @@ POST $URL/cart: Add new product to cart / Modify quantity of an existing product
 
 GET $URL/cart: Get product summary and quantity
     {
-        "prodcut_summary": {
+        "product_summary": {
             ...
         },
         "quantity": 2
@@ -117,6 +117,11 @@ GET $URL/cart: Get product summary and quantity
 Authorization Token:
 In *headers* section of the request, include a key of "Authorization", and a value of "Bearer <token>"
 
+GET $URL/admin/empty: Get product summary of out-of-stock items, ADMIN TOKEN REQUIRED
+    {
+        product_summary1,
+        ...
+    }
 
 [!1]. not the full functionalities for now only search by keyword (not filter, or sort)
 [!2]. no need to implement the show subcategory, as it can be displayed using the search
