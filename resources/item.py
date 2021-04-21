@@ -108,6 +108,10 @@ class ItemSearchApi(Resource):
 class EmptyStockApi(Resource):
     @jwt_required()
     def get(self):
+        user_id = get_jwt_identity()
+        user = User.objects.get(id=user_id)
+        if not user.privilege:
+            return {'error': 'Elevated privilege required'}, 403
         out_stock = extract_basic_info(json.loads(Product.objects(stock=0).to_json()))
         return Response(json.dumps(out_stock), mimetype="application/json", status=200)
 
