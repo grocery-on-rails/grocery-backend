@@ -118,6 +118,6 @@ class EmptyStockApi(Resource):
         user = User.objects.get(id=user_id)
         if not user.privilege:
             return {'error': 'Elevated privilege required'}, 403
-        out_stock = extract_basic_info(json.loads(Product.objects(stock=0).to_json()))
+        out_stock = extract_basic_info(json.loads(Product.objects(stock=0).to_json()), True)
         return Response(json.dumps(out_stock), mimetype="application/json", status=200)
 
