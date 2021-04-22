@@ -15,7 +15,8 @@ productSummary
         "id": ..., 
         "name": ...,
         "price": number,
-        "image": ImageURL
+        "image": ImageURL,
+        "discount": float
     },
 
 product
@@ -72,7 +73,7 @@ GET $URL/cat:
 GET $URL/product/ID:
     product
 
-GET $URL/search/keyword: Attach admin JWT token to return additional info of stock, discount, and subcategories
+GET $URL/search/keyword: Attach admin JWT token to return additional info of stock and subcategories
     List<productSummary>
 
 POST $URL/auth/signup: Returns the id of user in db

@@ -11,6 +11,7 @@ def extract_basic_info(products, isAdmin=False):
             product_basic['_id'] = product['_id']
             product_basic['name'] = product['name']
             product_basic['price'] = product['price']
+            product_basic['discount'] = product['discount']
             if(len(product['image_list']) > 0):
                 product_basic['image'] = product['image_list'][0]
             else:
@@ -18,7 +19,6 @@ def extract_basic_info(products, isAdmin=False):
             if isAdmin:
                 product_basic['stock'] = int(product['stock'])
                 product_basic['subcategory'] = product['subcategory']
-                product_basic['discount'] = product['discount']
         except KeyError:
             print("Failed to locate the correct key in the dicionary.")
             exit(1)
