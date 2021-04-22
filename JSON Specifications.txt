@@ -72,6 +72,9 @@ GET $URL/cat:
 GET $URL/product/ID:
     product
 
+GET $URL/search/keyword: Attach admin JWT token to return additional info of stock, discount, and subcategories
+    List<productSummary>
+
 POST $URL/auth/signup: Returns the id of user in db
     {
         "email": "grocery-on-rails@gmail.com",
@@ -125,5 +128,4 @@ GET $URL/admin/empty: Get product summary of out-of-stock items, ADMIN TOKEN REQ
 
 [!1]. not the full functionalities for now only search by keyword (not filter, or sort)
 [!2]. no need to implement the show subcategory, as it can be displayed using the search
-$URL/search/keyword:
-    List<productSummary>
+

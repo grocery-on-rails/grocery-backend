@@ -1,7 +1,6 @@
 from flask import Response, request
 from flask_jwt_extended.utils import get_jwt_identity
 from flask_jwt_extended.view_decorators import jwt_required
-import jwt
 from mongoengine.errors import DoesNotExist, ValidationError
 from database.models import Product, User
 from flask_restful import Resource
@@ -67,7 +66,14 @@ class ItemApi(Resource):
             return Response(item, mimetype="application/json", status=200)
 
 class ItemSearchApi(Resource):
+    @jwt_required(optional=True)
     def get(self, raw_keyword):
+        user_id = get_jwt_identity()
+        isAdmin = False
+        if user_id:
+            user = User.objects.get(id=user_id)
+            if user.privilege:
+                isAdmin = True
 
         keyword = unquote(raw_keyword)
         pipeline= [  
@@ -75,25 +81,25 @@ class ItemSearchApi(Resource):
                     {"$sort":{"score": -1}},
                     #{"$project": {"_id":0,"name": 1,"price": 1,"score": { "$meta": "searchScore" }}}
                   ]
-        matching_products = extract_basic_info((list(Product.objects().aggregate(pipeline))))[:100]
+        matching_products = extract_basic_info((list(Product.objects().aggregate(pipeline))), isAdmin)[:100]
         ids=[str(i["_id"]) for i in matching_products]
        
         if len(matching_products)<10:
-                p= extract_basic_info( json.loads(Product.objects( name__istartswith=keyword).to_json()))
+                p= extract_basic_info( json.loads(Product.objects( name__istartswith=keyword).to_json()), isAdmin)
                 
                 for i in p[:75]:             
                     if i["_id"]["$oid"] not in ids:
                             matching_products.append(i)
                             ids.append(i["_id"])
         if len(matching_products)<20:
-                p= extract_basic_info( json.loads(Product.objects( name__icontains=keyword).to_json()))
+                p= extract_basic_info( json.loads(Product.objects( name__icontains=keyword).to_json()), isAdmin)
                
                 for i in p[:50]:             
                     if i["_id"]["$oid"] not in ids:
                             matching_products.append(i)
                             ids.append(i["_id"])
         if len(matching_products)<30:
-                p= extract_basic_info( json.loads(Product.objects( description__icontains=keyword).to_json()))
+                p= extract_basic_info( json.loads(Product.objects( description__icontains=keyword).to_json()), isAdmin)
                 
                 for i in p[:25]:             
                     if i["_id"]["$oid"] not in ids:

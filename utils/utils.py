@@ -1,4 +1,5 @@
-def extract_basic_info(products):
+def extract_basic_info(products, isAdmin=False):
+    # If isAdmin is True, category and stock info will be retained
     basic_products = []
     is_iterable = True
     if not isinstance(products, list):
@@ -14,6 +15,10 @@ def extract_basic_info(products):
                 product_basic['image'] = product['image_list'][0]
             else:
                 product_basic['image'] = None
+            if isAdmin:
+                product_basic['stock'] = int(product['stock'])
+                product_basic['subcategory'] = product['subcategory']
+                product_basic['discount'] = product['discount']
         except KeyError:
             print("Failed to locate the correct key in the dicionary.")
             exit(1)
