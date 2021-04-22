@@ -45,6 +45,16 @@ product
          }
     },
 
+category
+    {
+        "category": ...,
+        "subcategory": [
+            "subcat1",
+            "subcat2",
+            "subcat3",
+        ]
+    }
+
 GET $URL/home:
     {
         slides: List<ImageURL>,
@@ -100,6 +110,25 @@ POST $URL/home: Create new product
 DELETE $URL/home: Delete a product
     {
         "id": ...
+    }
+
+DELETE $URL/cat: Delete a category
+    {
+        "category": ...
+    }
+
+POST $URL/cat/<categoryname>: Add multiple subcats to the category
+    {
+        "subcategory": [
+            "subcat1",
+            "subcat2",
+            ...
+        ]
+    }
+
+DELETE $URL/cat/<categoryname>: Delete one subcat from the category
+    {
+        "name": subcat1
     }
 
 APIs for user, attach user login JWT token when sending requests

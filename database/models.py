@@ -1,3 +1,4 @@
+from enum import unique
 from mongoengine.queryset.manager import queryset_manager
 from .db_init import db
 from flask_bcrypt import generate_password_hash, check_password_hash
@@ -16,8 +17,8 @@ class Product(db.DynamicDocument):
     }
 
 class Category(db.Document):
-    category = db.StringField()
-    subcategory = db.ListField(db.StringField)
+    category = db.StringField(required=True, unique=True)
+    subcategory = db.ListField(db.StringField())
     meta = {
         'collection': 'meta'
     }
