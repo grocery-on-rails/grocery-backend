@@ -14,11 +14,11 @@ import json
 class ItemsApi(Resource):
     def get(self):
         all_products = Product.objects()
-        recently_viewed = extract_basic_info(json.loads(all_products[0:3].to_json()))
-        new_arrivals = extract_basic_info(json.loads(Product.objects()[3:8].to_json()))
-        today_deals = extract_basic_info(json.loads(Product.objects(discount__ne=0).order_by('-discount')[0:5].to_json()))
-        top_sells = extract_basic_info(json.loads(Product.objects()[8:11].to_json()))
-        fresh_vegies = extract_basic_info(json.loads(Product.objects()[11:15].to_json()))
+        recently_viewed = extract_basic_info(json.loads(all_products[0:5].to_json()))
+        new_arrivals = extract_basic_info(json.loads(Product.objects()[5:10].to_json()))
+        today_deals = extract_basic_info(json.loads(Product.objects(discount__gt=0)[:20].to_json()))
+        top_sells = extract_basic_info(json.loads(Product.objects()[20:25].to_json()))
+        fresh_vegies = extract_basic_info(json.loads(Product.objects()[0:16].to_json()))
         data = {}
         data['slides'] = list(["https://via.placeholder.com/150", "https://via.placeholder.com/100", "https://via.placeholder.com/200"])
         data['content'] = list([{'title': 'Recently Viewed', 'content': recently_viewed}, \
