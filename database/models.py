@@ -11,7 +11,9 @@ class Product(db.DynamicDocument):
     subcategory = db.ListField(db.StringField())
     description = db.StringField(required=True)
     others = db.DynamicField()
-
+    scraped_url = db.URLField()
+    stock = db.IntField(required=True)
+    discount = db.FloatField()
     meta = {
         'collection': 'products'
     }

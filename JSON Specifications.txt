@@ -112,6 +112,11 @@ DELETE $URL/home: Delete a product
         "id": ...
     }
 
+POST $URL/product/<id>: Modify an existing product: it cannot add new keys that is not in the database
+    {
+        "key": "value",
+    }
+
 DELETE $URL/cat: Delete a category
     {
         "category": ...

@@ -64,6 +64,24 @@ class ItemApi(Resource):
             return {'error': 'Product ID not found'}, 404
         else:
             return Response(item, mimetype="application/json", status=200)
+    
+    @jwt_required()
+    def post(self, id):
+        user_id = get_jwt_identity()
+        user = User.objects.get(id=user_id)
+        if not user.privilege:
+            return {'error': 'Elevated privilege required'}, 403
+        try:
+            item = Product.objects.get(id=id)
+        except DoesNotExist:
+            return {'error': 'Product ID not found'}, 404
+        else:
+            body = request.get_json()
+            for field in ['name', 'price', 'image_list', 'subcategory', 'description', 'scraped_url', 'stock', 'discount']:
+                if body.get(field):
+                    item[field] = body.get(field)
+            item.save()
+            return {'msg': 'Success'}, 200
 
 class ItemSearchApi(Resource):
     @jwt_required(optional=True)
