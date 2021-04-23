@@ -31,6 +31,7 @@ class User(db.DynamicDocument):
     email = db.EmailField(required=True)
     privilege = db.BooleanField(default=False)
     cart = db.ListField(db.DictField())
+    address = db.ListField(db.StringField())
     meta = {
         'collection': 'users'
     }

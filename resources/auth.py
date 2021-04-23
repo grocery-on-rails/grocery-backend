@@ -30,11 +30,11 @@ class LoginApi(Resource):
         authorized = user.check_password(body.get('password'))
         if not authorized:
             return {'error': 'Email or password invalid'}, 401
-        
+                
         expires = datetime.timedelta(days=1)
         access_token = create_access_token(identity=str(user.id), expires_delta=expires)
         now = datetime.datetime.utcnow()
         expires_epoch = ((now + expires) - datetime.datetime(1970, 1, 1)).total_seconds()
-        return {'token': access_token, 'token_expiry': expires_epoch}, 200
+        return {'token': access_token, 'token_expiry': expires_epoch, 'username': user.username, 'address': user.address}, 200
 
         

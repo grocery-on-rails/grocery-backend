@@ -96,6 +96,7 @@ POST $URL/auth/signup: Returns the id of user in db
     }
 
 POST $URL/auth/login: Returns the JWT token for access, save it for future requests, the token identifies an unique user, use it whenever user information is involved
+    It also returns username and addresses for all users
     {
         "email": ...,
         "password": ...
@@ -150,6 +151,18 @@ GET $URL/cart: Get product summary and quantity
             ...
         },
         "quantity": 2
+    }
+
+POST $URL/userprofile: Update user profile settings, it will only change the first key-value pair. When updating address, whatever in the value will replace the original list
+    {
+        "email": ... OR
+        "password": ... OR
+        "address": [
+            "1",
+            "2",
+            "3"
+        ] OR
+        "username": ...
     }
 
 Authorization Token:
