@@ -84,7 +84,21 @@ GET $URL/product/ID:
     product
 
 GET $URL/search/keyword: Attach admin JWT token to return additional info of stock and subcategories
-    List<productSummary>
+    body
+    {
+        "sort": "price+"(Ascending) | "price-"(Descending) | "relevance",
+        // Optional arguments below
+        "price_min": Int,
+        "price_max": Int,
+        "subcategories": [
+            "subcat1",
+            "subcat2",
+            "subcat3"
+        ]
+    }
+    
+    return:
+        List<productSummary>
 
 POST $URL/auth/signup: Returns the id of user in db
     {
@@ -163,6 +177,12 @@ POST $URL/userprofile: Update user profile settings, it will only change the fir
             "3"
         ] OR
         "username": ...
+    }
+
+POST $URL/order: Clear the current cart and create an order based on it
+    {
+        "address": ...,
+        "payment_method": ... (Not used in backend for now)
     }
 
 Authorization Token:
