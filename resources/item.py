@@ -12,6 +12,7 @@ import json
 
 # Method for handling API requests related to an item
 class ItemsApi(Resource):
+    @jwt_required(optional=True)
     def get(self):
         all_products = Product.objects()
         recently_viewed = extract_basic_info(json.loads(all_products[0:5].to_json()))
@@ -21,9 +22,11 @@ class ItemsApi(Resource):
         fresh_vegies = extract_basic_info(json.loads(Product.objects()[0:16].to_json()))
         data = {}
         data['slides'] = list(["https://via.placeholder.com/150", "https://via.placeholder.com/100", "https://via.placeholder.com/200"])
-        data['content'] = list([{'title': 'Recently Viewed', 'content': recently_viewed}, \
-        {'title': 'New Arrivals', 'content': new_arrivals}, {'title': 'Today\'s Deals', 'content': today_deals}, \
-        {'title': 'Top Sellers', 'content': top_sells}, {'title': 'Fresh Vegies', 'content': fresh_vegies}])
+        data['content'] = list([{'title': 'Today\'s Deals', 'content': today_deals}, \
+        {'title': 'New Arrivals', 'content': new_arrivals}, {'title': 'Top Sellers', 'content': top_sells}, \
+        {'title': 'Fresh Vegies', 'content': fresh_vegies}])
+        if get_jwt_identity():
+            data['content'].append({'title': 'Recently Viewed', 'content': recently_viewed})
         return Response(json.dumps(data), mimetype="application/json", status=200)
 
     @jwt_required()
