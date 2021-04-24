@@ -35,3 +35,5 @@ class OrderPaidApi(Resource):
         user = User.objects.get(id=user_id)
         if user.orders:
             return Response(json_util.dumps(user.orders), mimetype="json/application", status=200)
+        else:
+            return {'error': 'User has no orders'}, 404
