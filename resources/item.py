@@ -93,6 +93,27 @@ class ItemSearchApi(Resource):
             if user.privilege:
                 isAdmin = True
 
+        body = request.get_json()
+
+        isSortByPrice = True
+        isAscending = True
+        if body.get('sort') == 'price+':
+            pass
+        elif body.get('sort') == 'price-':
+            isAscending = False
+        else:
+            isSortByPrice = False
+
+        price_min = price_max = 0
+        if body.get('price_min'):
+            price_min = int(body.get('price_min'))
+        if body.get('price_max'):
+            price_max = int(body.get('price_max'))
+        
+        list_subcategory = []
+        if body.get('subcategories'):
+            list_subcategory = body.get('subcategories')
+
         keyword = unquote(raw_keyword)
         pipeline= [  
                     {"$search": {"text": {"query": keyword, "path": ["name","subcategory","description","others.quantity"]}}},

@@ -3,7 +3,7 @@ from os import access
 from flask_restful import Resource
 from flask import Response, request
 from flask_jwt_extended import create_access_token
-from mongoengine.errors import DoesNotExist
+from mongoengine.errors import DoesNotExist, ValidationError
 from database.models import User
 import datetime
 
@@ -15,9 +15,16 @@ class SignupApi(Resource):
         except DoesNotExist:
             user = User(**body)
             user.hash_password()
-            user.save()
-            id = user.id
-            return {'id': str(id)}, 200
+            try:
+                user.save()
+            except ValidationError as e:
+                return {'error': str(e)}, 401
+            else:
+                expires = datetime.timedelta(days=1)
+                access_token = create_access_token(identity=str(user.id), expires_delta=expires)
+                now = datetime.datetime.utcnow()
+                expires_epoch = ((now + expires) - datetime.datetime(1970, 1, 1)).total_seconds()
+                return {'token': access_token, 'token_expiry': expires_epoch, 'username': user.username, 'address': user.address}, 200
         else:
             return {'error': 'Email already exists'}, 409
 class LoginApi(Resource):

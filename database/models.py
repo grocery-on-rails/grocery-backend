@@ -28,7 +28,7 @@ class Category(db.Document):
 class User(db.DynamicDocument):
     username = db.StringField()
     password = db.StringField(required=True)
-    email = db.EmailField(required=True)
+    email = db.EmailField(required=True, unique=True)
     privilege = db.BooleanField(default=False)
     cart = db.ListField(db.DictField())
     address = db.ListField(db.StringField())
