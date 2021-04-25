@@ -98,15 +98,16 @@ class ItemSearchApi(Resource):
 
         body = request.get_json()
 
-        isSortByPrice = True
-        isAscending = True
-        if body.get('sort') == 'price+':
-            pass
-        elif body.get('sort') == 'price-':
-            isAscending = False
-        else:
-            isSortByPrice = False
-            isAscending = False
+        isSortByPrice = False
+        isAscending = False
+        if body:    
+            if body.get('sort') == 'price+':
+                isSortByPrice = True
+                isAscending = True
+            elif body.get('sort') == 'price-':
+                isSortByPrice = True
+            else:
+                pass
         match={"$match":{}}
         price_min  = 0
         price_max = 999999
