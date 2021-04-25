@@ -81,7 +81,7 @@ class ItemApi(Resource):
         else:
             body = request.get_json()
             for field in ['name', 'price', 'image_list', 'subcategory', 'description', 'scraped_url', 'stock', 'discount']:
-                if body.get(field):
+                if (body.get(field) != None):
                     item[field] = body.get(field)
             item.save()
             return {'msg': 'Success'}, 200
