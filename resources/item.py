@@ -104,6 +104,7 @@ class ItemSearchApi(Resource):
         match={"$match":{}}
         price_min  = 0
         price_max = 999999
+        list_subcategory = []
         if body:    
             if body.get('sort') == 'price+':
                 isSortByPrice = True
@@ -120,7 +121,6 @@ class ItemSearchApi(Resource):
                 price_max = int(body.get('price_max'))
                 match["$match"]["price"]={"$lte":price_max}
             
-            list_subcategory = []
             if body.get('subcategories'):
                 list_subcategory = body.get('subcategories')
                 match["$match"]["subcategory"]={"$all":list_subcategory}
