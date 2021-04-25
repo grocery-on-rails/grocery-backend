@@ -100,6 +100,8 @@ class ItemSearchApi(Resource):
 
         isSortByPrice = False
         isAscending = False
+        
+        match={"$match":{}}
         if body:    
             if body.get('sort') == 'price+':
                 isSortByPrice = True
@@ -108,20 +110,20 @@ class ItemSearchApi(Resource):
                 isSortByPrice = True
             else:
                 pass
-        match={"$match":{}}
-        price_min  = 0
-        price_max = 999999
-        if body.get('price_min'):
-            price_min = int(body.get('price_min'))
-            match["$match"]["price"]={"$gte":price_min}
-        if body.get('price_max'):
-            price_max = int(body.get('price_max'))
-            match["$match"]["price"]={"$lte":price_max}
-        
-        list_subcategory = []
-        if body.get('subcategories'):
-            list_subcategory = body.get('subcategories')
-            match["$match"]["subcategory"]={"$all":list_subcategory}
+            
+            price_min  = 0
+            price_max = 999999
+            if body.get('price_min'):
+                price_min = int(body.get('price_min'))
+                match["$match"]["price"]={"$gte":price_min}
+            if body.get('price_max'):
+                price_max = int(body.get('price_max'))
+                match["$match"]["price"]={"$lte":price_max}
+            
+            list_subcategory = []
+            if body.get('subcategories'):
+                list_subcategory = body.get('subcategories')
+                match["$match"]["subcategory"]={"$all":list_subcategory}
 
 
         keyword = unquote(raw_keyword)
