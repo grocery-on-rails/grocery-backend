@@ -102,6 +102,8 @@ class ItemSearchApi(Resource):
         isAscending = False
         
         match={"$match":{}}
+        price_min  = 0
+        price_max = 999999
         if body:    
             if body.get('sort') == 'price+':
                 isSortByPrice = True
@@ -111,8 +113,6 @@ class ItemSearchApi(Resource):
             else:
                 pass
             
-            price_min  = 0
-            price_max = 999999
             if body.get('price_min'):
                 price_min = int(body.get('price_min'))
                 match["$match"]["price"]={"$gte":price_min}
