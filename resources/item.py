@@ -171,6 +171,16 @@ class ItemSearchApi(Resource):
         #matching_products = extract_basic_info(json.loads(Product.objects(name__contains=keyword).to_json()))
         return Response(json_util.dumps(matching_products), mimetype="application/json", status=200)
 
+class CategorySearchApi(Resource):
+    def get(self):
+        body = request.get_json()
+        if body:
+            if body.get('subcategory'):
+                subcat = body.get('subcategory')
+                subcat_product = extract_basic_info(json.loads(Product.objects(subcategory=subcat).to_json()))
+                return Response(json_util.dumps(subcat_product), mimetype="json/application", status=200)
+        return {'error': 'Subcategory not found/given'}, 401
+
 class EmptyStockApi(Resource):
     @jwt_required()
     def get(self):

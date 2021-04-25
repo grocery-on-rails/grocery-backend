@@ -1,4 +1,4 @@
-from .item import ItemsApi, ItemApi, ItemSearchApi, EmptyStockApi
+from .item import ItemsApi, ItemApi, ItemSearchApi, EmptyStockApi, CategorySearchApi
 from .category import CategoryApi, SubcategoryApi
 from .auth import SignupApi, LoginApi
 from .cart import CartApi
@@ -17,3 +17,4 @@ def initialize_routes(api):
     api.add_resource(SubcategoryApi, '/cat/<raw_keyword>')
     api.add_resource(UserProfileApi, '/userprofile')
     api.add_resource(OrderPaidApi, '/order')
+    api.add_resource(CategorySearchApi, '/search')
