@@ -3,7 +3,7 @@ from .category import CategoryApi, SubcategoryApi
 from .auth import SignupApi, LoginApi
 from .cart import CartApi
 from .usersetting import UserProfileApi
-from .orders import OrderPaidApi
+from .orders import OrderPaidApi, RetrieveOrdersApi
 
 def initialize_routes(api):
     api.add_resource(ItemsApi, '/home')
@@ -18,3 +18,4 @@ def initialize_routes(api):
     api.add_resource(UserProfileApi, '/userprofile')
     api.add_resource(OrderPaidApi, '/order')
     api.add_resource(CategorySearchApi, '/search')
+    api.add_resource(RetrieveOrdersApi, '/admin/orders')

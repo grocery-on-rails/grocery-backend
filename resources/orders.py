@@ -37,3 +37,13 @@ class OrderPaidApi(Resource):
             return Response(json_util.dumps(user.orders), mimetype="json/application", status=200)
         else:
             return {'error': 'User has no orders'}, 404
+
+class RetrieveOrdersApi(Resource):
+    @jwt_required()
+    def get(self):
+        user_id = get_jwt_identity()
+        user = User.objects.get(id=user_id)
+        if not user.privilege:
+            return {'error': 'Elevated privilege required'}, 403
+        users = User.objects(orders__0__exists=True).only('username', 'email', 'orders').to_json()
+        return Response(users, mimetype="json/application", status=200)
