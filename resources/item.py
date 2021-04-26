@@ -26,6 +26,7 @@ class ItemsApi(Resource):
         {'title': 'New Arrivals', 'content': new_arrivals}, {'title': 'Top Sellers', 'content': top_sells}, \
         {'title': 'Fresh Vegies', 'content': fresh_vegies}])
         if get_jwt_identity():
+            recently_viewed=[extract_basic_info(json.loads(Product.objects(id=i).to_json())) for i in User.objects(id=get_jwt_identity())[0].recently_viewed][:100]
             data['content'].append({'title': 'Recently Viewed', 'content': recently_viewed})
         return Response(json.dumps(data), mimetype="application/json", status=200)
 
@@ -60,12 +61,21 @@ class ItemsApi(Resource):
         return {'msg': 'Success'}, 200
 
 class ItemApi(Resource):
+    @jwt_required(optional=True)
     def get(self, id):
         try:
             item = Product.objects().get(id=id).to_json()
         except DoesNotExist:
             return {'error': 'Product ID not found'}, 404
         else:
+             
+            if get_jwt_identity():
+                user_id=get_jwt_identity()
+                if User.objects(id=user_id,recently_viewed=id):
+                    User.objects(id=user_id).update_one(pull__recently_viewed=id)
+                User.objects(id=user_id).update_one(push__recently_viewed=id)
+                # print(User.objects(id=user_id)[0].recently_viewed)
+            
             return Response(item, mimetype="application/json", status=200)
     
     @jwt_required()
