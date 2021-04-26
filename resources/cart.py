@@ -55,18 +55,17 @@ class CartApi(Resource):
         cart_items_with_quantity = []
         invalid_item_index = []
         cnt = 0
-        for item in user.cart:
-            try:
-                cart_item = json.loads(Product.objects.get(id=item['product_id']).to_json())
-            except KeyError:
-                return Response(json_util.dumps(item), mimetype="json/application", status=200)
-            except DoesNotExist:
-                invalid_item_index.append(cnt)
-            else:    
-                cart_items_with_quantity.append({'product_summary': extract_basic_info(cart_item), 'quantity': item['quantity']})
-            cnt+=1
-        if invalid_item_index:
-            for x in reversed(invalid_item_index):
-                user.cart.pop(x)
-            user.save()
+        if user.cart:
+            for item in user.cart:
+                try:
+                    cart_item = json.loads(Product.objects.get(id=item['product_id']).to_json())
+                except DoesNotExist:
+                    invalid_item_index.append(cnt)
+                else:    
+                    cart_items_with_quantity.append({'product_summary': extract_basic_info(cart_item), 'quantity': item['quantity']})
+                cnt+=1
+            if invalid_item_index:
+                for x in reversed(invalid_item_index):
+                    user.cart.pop(x)
+                user.save()
         return Response(json.dumps(cart_items_with_quantity), mimetype="application/json", status=200)
