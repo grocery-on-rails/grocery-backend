@@ -34,10 +34,7 @@ class OrderPaidApi(Resource):
     def get(self):
         user_id = get_jwt_identity()
         user = User.objects.get(id=user_id)
-        if user.orders:
-            return Response(json_util.dumps(user.orders), mimetype="json/application", status=200)
-        else:
-            return {'error': 'User has no orders'}, 404
+        return Response(json_util.dumps(user.orders), mimetype="json/application", status=200)
 
 class RetrieveOrdersApi(Resource):
     @jwt_required()
