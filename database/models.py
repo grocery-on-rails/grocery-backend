@@ -33,6 +33,7 @@ class User(db.DynamicDocument):
     cart = db.ListField(db.DictField(), null=True)
     address = db.ListField(db.StringField())
     orders = db.ListField(db.DictField())
+    recently_viewed = db.ListField(db.StringField())
     meta = {
         'collection': 'users'
     }
