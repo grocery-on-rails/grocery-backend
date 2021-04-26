@@ -4,6 +4,7 @@ from .auth import SignupApi, LoginApi
 from .cart import CartApi
 from .usersetting import UserProfileApi
 from .orders import OrderPaidApi, RetrieveOrdersApi
+from .misc import AdminStatsApi
 
 def initialize_routes(api):
     api.add_resource(ItemsApi, '/home')
@@ -19,3 +20,4 @@ def initialize_routes(api):
     api.add_resource(OrderPaidApi, '/order')
     api.add_resource(CategorySearchApi, '/search')
     api.add_resource(RetrieveOrdersApi, '/admin/orders')
+    api.add_resource(AdminStatsApi, '/admin/stats')
