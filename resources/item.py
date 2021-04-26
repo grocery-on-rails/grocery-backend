@@ -26,7 +26,9 @@ class ItemsApi(Resource):
         {'title': 'New Arrivals', 'content': new_arrivals}, {'title': 'Top Sellers', 'content': top_sells}, \
         {'title': 'Fresh Vegies', 'content': fresh_vegies}])
         if get_jwt_identity():
-            recently_viewed=extract_basic_info(json.loads(Product.objects(id__in=User.objects(id=get_jwt_identity())[0].recently_viewed).to_json()))
+            # print([i for i in User.objects(id=get_jwt_identity())[0].recently_viewed])
+            recently_viewed=extract_basic_info(([json.loads(Product.objects(id=i)[0].to_json()) for i in User.objects(id=get_jwt_identity())[0].recently_viewed[:-11:-1]]))
+            
             data['content'].append({'title': 'Recently Viewed', 'content': recently_viewed})
             recently_viewed=User.objects(id=get_jwt_identity())[0].recently_viewed
             # recently_viewed= map(objectid.ObjectId,recently_viewed)
