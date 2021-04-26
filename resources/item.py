@@ -16,15 +16,18 @@ class ItemsApi(Resource):
     def get(self):
         all_products = Product.objects()
         recently_viewed = extract_basic_info(json.loads(all_products[0:5].to_json()))
-        new_arrivals = extract_basic_info(json.loads(Product.objects()[5:10].to_json()))
+        new_arrivals = extract_basic_info(json.loads(all_products[5:10].to_json()))
         today_deals = extract_basic_info(json.loads(Product.objects(discount__gt=0)[:20].to_json()))
-        top_sells = extract_basic_info(json.loads(Product.objects()[20:25].to_json()))
+        pipeline=[{"$unwind": "$orders" },{"$unwind": "$orders.cart" },{"$group":{"_id":"$orders.cart.product_id", "quantity":{"$sum": "$orders.cart.quantity"}}}, {"$sort":{"quantity":-1}}]
+        sales=[json.loads(Product.objects(id=i["_id"])[0].to_json()) for i in list(User.objects.aggregate(pipeline))[:10]]
+        
+        top_sells = extract_basic_info(sales)
         fresh_vegies = extract_basic_info(json.loads(Product.objects()[0:16].to_json()))
         data = {}
         data['slides'] = list(["https://via.placeholder.com/150", "https://via.placeholder.com/100", "https://via.placeholder.com/200"])
         data['content'] = list([{'title': 'Today\'s Deals', 'content': today_deals}, \
         {'title': 'New Arrivals', 'content': new_arrivals}, {'title': 'Top Sellers', 'content': top_sells}, \
-        {'title': 'Fresh Vegies', 'content': fresh_vegies}])
+        {'title': 'Veggies', 'content': fresh_vegies}])
         if get_jwt_identity():
             # print([i for i in User.objects(id=get_jwt_identity())[0].recently_viewed])
             recently_viewed=extract_basic_info(([json.loads(Product.objects(id=i)[0].to_json()) for i in User.objects(id=get_jwt_identity())[0].recently_viewed[:-11:-1]]))
