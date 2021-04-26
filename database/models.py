@@ -30,7 +30,7 @@ class User(db.DynamicDocument):
     password = db.StringField(required=True)
     email = db.EmailField(required=True, unique=True)
     privilege = db.BooleanField(default=False)
-    cart = db.ListField(db.DictField())
+    cart = db.ListField(db.DictField(), null=True)
     address = db.ListField(db.StringField())
     orders = db.ListField(db.DictField())
     meta = {

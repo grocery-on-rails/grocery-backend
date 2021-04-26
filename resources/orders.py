@@ -22,8 +22,9 @@ class OrderPaidApi(Resource):
             new_order['delivery_time'] = None
             new_order['address'] = body.get('address')
             new_order['cart'] = user.cart
+            new_order['payment_method'] = body.get('payment_method')
             user.orders.append(new_order)
-            user.cart = [dict()]
+            user.cart = None
             user.save()
             return {'msg': 'Success'}, 200
         else:

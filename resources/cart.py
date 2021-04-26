@@ -37,7 +37,10 @@ class CartApi(Resource):
             except DoesNotExist:
                 user = User.objects.get(id=user_id)
                 new_dict = {"product_id": product_id, "quantity": quantity}
-                user.cart.append(new_dict)
+                if user.cart:
+                    user.cart.append(new_dict)
+                else:
+                    user.cart = [new_dict]
             else:
                 for item in user.cart:
                     if(item['product_id'] == product_id):
