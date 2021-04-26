@@ -48,3 +48,23 @@ class RetrieveOrdersApi(Resource):
             return {'error': 'Elevated privilege required'}, 403
         users = User.objects(orders__0__exists=True).only('username', 'email', 'orders').to_json()
         return Response(users, mimetype="json/application", status=200)
+
+    @jwt_required()
+    def post(self):
+        user_id = get_jwt_identity()
+        user = User.objects.get(id=user_id)
+        if not user.privilege:
+            return {'error': 'Elevated privilege required'}, 403
+        body = request.get_json()
+        if body.get('order_id'):
+            customer_id = body.get('order_id')[:24]
+            customer = User.objects.get(id=customer_id)
+            for order in customer.orders:
+                if order['order_id'] == body.get('order_id'):
+                    if body.get('status'):
+                        order['status'] = body.get('status')
+                    if body.get('delivery_time'):
+                        order['delivery_time'] = body.get('delivery_time')
+                    customer.save()
+                    return {'msg': 'Success'}, 200
+        return {'error': 'Order Id not given or not found'}, 404
