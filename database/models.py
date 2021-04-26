@@ -21,6 +21,7 @@ class Product(db.DynamicDocument):
 class Category(db.Document):
     category = db.StringField(required=True, unique=True)
     subcategory = db.ListField(db.StringField())
+    image = db.URLField()
     meta = {
         'collection': 'meta'
     }
