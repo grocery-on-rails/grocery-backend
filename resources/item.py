@@ -6,7 +6,7 @@ from database.models import Product, User
 from flask_restful import Resource
 from utils.utils import *
 from urllib.parse import unquote
-from bson import json_util
+from bson import json_util, objectid
 import json
 
 
@@ -28,7 +28,30 @@ class ItemsApi(Resource):
         if get_jwt_identity():
             recently_viewed=extract_basic_info(json.loads(Product.objects(id__in=User.objects(id=get_jwt_identity())[0].recently_viewed).to_json()))
             data['content'].append({'title': 'Recently Viewed', 'content': recently_viewed})
-        return Response(json.dumps(data), mimetype="application/json", status=200)
+            recently_viewed=User.objects(id=get_jwt_identity())[0].recently_viewed
+            # recently_viewed= map(objectid.ObjectId,recently_viewed)
+            recently_viewed=[objectid.ObjectId(i) for i in recently_viewed]
+            pipeline=[
+
+                    {"$match":{"_id":{"$in":recently_viewed}}},
+                    {"$project": {"_id":0,"subcategory":1}},
+
+            
+            ]
+            s=[]
+            for i in list(Product.objects().aggregate(pipeline)):
+                    s=s+i["subcategory"]
+            s=list(set(s))
+            pipeline=[
+
+                    {"$match":{"subcategory":{"$in":s}}},
+                    {"$sample": {"size":20}},
+
+            
+            ]
+            
+            data['content'].append({'title': 'Recommended Products', 'content': extract_basic_info((list(Product.objects().aggregate(pipeline))))[:100]})
+        return Response(json_util.dumps(data), mimetype="application/json", status=200)
 
     @jwt_required()
     def post(self):
