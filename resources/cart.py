@@ -58,6 +58,8 @@ class CartApi(Resource):
         for item in user.cart:
             try:
                 cart_item = json.loads(Product.objects.get(id=item['product_id']).to_json())
+            except KeyError:
+                return Response(json_util.dumps(item), mimetype="json/application", status=200)
             except DoesNotExist:
                 invalid_item_index.append(cnt)
             else:    
