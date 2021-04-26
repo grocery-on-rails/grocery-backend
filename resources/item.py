@@ -26,7 +26,7 @@ class ItemsApi(Resource):
         {'title': 'New Arrivals', 'content': new_arrivals}, {'title': 'Top Sellers', 'content': top_sells}, \
         {'title': 'Fresh Vegies', 'content': fresh_vegies}])
         if get_jwt_identity():
-            recently_viewed=[extract_basic_info(json.loads(Product.objects(id=i).to_json())) for i in User.objects(id=get_jwt_identity())[0].recently_viewed][:100]
+            recently_viewed=extract_basic_info(json.loads(Product.objects(id__in=User.objects(id=get_jwt_identity())[0].recently_viewed).to_json()))
             data['content'].append({'title': 'Recently Viewed', 'content': recently_viewed})
         return Response(json.dumps(data), mimetype="application/json", status=200)
 
