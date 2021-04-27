@@ -20,7 +20,7 @@ class AdminStatsApi(Resource):
         number_product = Product.objects().count()
         number_outofstock = Product.objects(stock=0).count()
         number_onsale = Product.objects(discount__ne=0).count()
-        number_order = User.objects(order__0__exists=True).count()
+        number_order = (list(User.objects.aggregate({"$unwind":"$orders"}, {"$count":"number_orders"})))[0]["number_orders"]
         number_belowfive = Product.objects(stock__lte=5).count()
         stats = {'number_customer': number_customer, 'number_product': number_product, 'number_outofstock': number_outofstock, \
                 'number_onsale': number_onsale, 'number_order': number_order, 'number_belowfive': number_belowfive}
