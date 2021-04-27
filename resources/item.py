@@ -126,7 +126,7 @@ class ItemApi(Resource):
 
 class ItemSearchApi(Resource):
     @jwt_required(optional=True)
-    def get(self, raw_keyword):
+    def post(self, raw_keyword):
         user_id = get_jwt_identity()
         isAdmin = False
         if user_id:
