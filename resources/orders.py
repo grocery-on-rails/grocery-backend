@@ -2,7 +2,7 @@ from flask import Response, request
 from flask_jwt_extended.utils import get_jwt_identity
 from flask_jwt_extended.view_decorators import jwt_required
 from mongoengine.errors import DoesNotExist, ValidationError
-from database.models import Category, User
+from database.models import Category, Product, User
 from flask_restful import Resource
 from bson import json_util
 import time
@@ -15,6 +15,14 @@ class OrderPaidApi(Resource):
         body = request.get_json()
         new_order = {}
         if user.cart:
+            for product in user.cart:
+                try:
+                    item = Product.objects.get(id=product['product_id'])
+                except DoesNotExist:
+                    continue
+                else:
+                    item.stock = max(item.stock-product['quantity'], 0)
+                    item.save()
             order_created = time.time()
             new_order['order_id'] = str(user_id) + str(order_created)
             new_order['status'] = 'pending'
