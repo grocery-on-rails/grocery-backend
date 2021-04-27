@@ -212,10 +212,23 @@ class ItemSearchApi(Resource):
 class CategorySearchApi(Resource):
     def get(self):
         body = request.get_json()
-        if body:
+        isSortByPrice = False
+        isAscending = False
+        if body:    
+            if body.get('sort') == 'price+':
+                isSortByPrice = True
+                isAscending = True
+            elif body.get('sort') == 'price-':
+                isSortByPrice = True
             if body.get('subcategory'):
                 subcat = body.get('subcategory')
-                subcat_product = extract_basic_info(json.loads(Product.objects(subcategory=subcat).to_json()))
+                if isSortByPrice:
+                    if isAscending:
+                        subcat_product = extract_basic_info(json.loads(Product.objects(subcategory=subcat).order_by('+price').to_json()))
+                    else:
+                        subcat_product = extract_basic_info(json.loads(Product.objects(subcategory=subcat).order_by('-price').to_json()))
+                else:
+                    subcat_product = extract_basic_info(json.loads(Product.objects(subcategory=subcat).to_json()))
                 return Response(json_util.dumps(subcat_product), mimetype="json/application", status=200)
         return {'error': 'Subcategory not found/given'}, 401
 
