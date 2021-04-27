@@ -210,7 +210,7 @@ class ItemSearchApi(Resource):
         return Response(json_util.dumps(matching_products), mimetype="application/json", status=200)
 
 class CategorySearchApi(Resource):
-    def POST(self):
+    def post(self):
         body = request.get_json()
         isSortByPrice = False
         isAscending = False
