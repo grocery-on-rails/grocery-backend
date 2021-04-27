@@ -22,7 +22,13 @@ class AdminStatsApi(Resource):
         number_onsale = Product.objects(discount__ne=0).count()
         number_order = (list(User.objects.aggregate({"$unwind":"$orders"}, {"$count":"number_orders"})))[0]["number_orders"]
         number_belowfive = Product.objects(stock__lte=5).count()
+        pipeline=[{"$unwind": "$orders" },{"$unwind": "$orders.cart" },{"$group":{"_id":"$orders.cart.product_id", "quantity":{"$sum": "$orders.cart.quantity"}}}, {"$sort":{"quantity":-1}}]
+        result=list(User.objects.aggregate(pipeline))
+        sales=[json.loads(Product.objects(id=i["_id"])[0].to_json()) for i in result]
+        for i,pro in enumerate(sales):
+            pro["stock"]=result[i]["quantity"]
+        top_sells = extract_basic_info(sales)
         stats = {'number_customer': number_customer, 'number_product': number_product, 'number_outofstock': number_outofstock, \
-                'number_onsale': number_onsale, 'number_order': number_order, 'number_belowfive': number_belowfive}
+                'number_onsale': number_onsale, 'number_order': number_order, 'number_belowfive': number_belowfive, "top_sells":top_sells}
         return Response(json.dumps(stats), mimetype='json/application', status=200)
         
