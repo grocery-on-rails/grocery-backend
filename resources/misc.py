@@ -10,7 +10,7 @@ from bson import json_util
 import json
 
 class AdminStatsApi(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self):
         user_id = get_jwt_identity()
         user = User.objects.get(id=user_id)
@@ -24,5 +24,5 @@ class AdminStatsApi(Resource):
         number_belowfive = Product.objects(stock__lte=5).count()
         stats = {'number_customer': number_customer, 'number_product': number_product, 'number_outofstock': number_outofstock, \
                 'number_onsale': number_onsale, 'number_order': number_order, 'number_belowfive': number_belowfive}
-        return Response(json_util.dumps(stats), mimetype='json/application', status=200)
+        return Response(json.dumps(stats), mimetype='json/application', status=200)
         
